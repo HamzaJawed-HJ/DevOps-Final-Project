@@ -76,6 +76,19 @@ app.use((err, req, res, next) => {
   });
 });
 
+
+
+app.get("/health", (req, res) => {
+  res.send("OK");
+});
+
+app.get("/crash", (req, res) => {
+  res.send("App will crash now...");
+  process.exit(1); // Simulate crash
+});
+
+
+
 // Handle 404 routes
 app.use('*', (req, res) => {
   res.status(404).json({ 
@@ -118,5 +131,6 @@ app.listen(PORT, () => {
   console.log(`Static files served from: ${uploadsFolder}`);
   console.log(`API Documentation available at http://localhost:${PORT}`);
 });
+
 
 export default app;
