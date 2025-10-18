@@ -27,3 +27,41 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/node-selfheal-app:latest
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+
+            echo "🚀 Starting deployment on EC2..."
+
+            # Step 1: Navigate or create the project folder
+            mkdir -p ~/self-healing-app
+            cd ~/self-healing-app
+
+            # Step 2: Pull latest docker-compose.yml (optional: if you store it in repo)
+            # In this approach, we assume docker-compose.yml is in Docker image repo or manually uploaded once.
+            scp docker-compose.yml ~/self-healing-app/
+
+            # Step 3: Create or update .env file with secrets
+            cat > .env <<'EOF'
+            MONGO_URI=${{ secrets.MONGO_URI }}
+            PORT=3000
+            EOF
+
+            echo "✅ .env file updated"
+
+            # Step 4: Pull latest image from Docker Hub
+            docker-compose pull
+
+            # Step 5: Stop old containers (if running)
+            docker-compose down || true
+
+            # Step 6: Start containers with restart policy
+            docker-compose up -d
+
+            echo "✅ Deployment complete. App running on EC2: http://${{ secrets.EC2_HOST }}:3000"
