@@ -46,8 +46,8 @@ jobs:
             # Step 2: Pull latest docker-compose.yml (optional: if you store it in repo)
             # In this approach, we assume docker-compose.yml is in Docker image repo or manually uploaded once.
            
-            echo "📦 Copying docker-compose.yml from repo to EC2 folder"
-            cp ~/runner/work/DevOps-Final-Project/DevOps-Final-Project/docker-compose.yml ~/self-healing-app/
+            # echo "📦 Copying docker-compose.yml from repo to EC2 folder"
+            # cp ~/runner/work/DevOps-Final-Project/DevOps-Final-Project/docker-compose.yml ~/self-healing-app/
 
             # Step 3: Create or update .env file with secrets
             cat > .env <<'EOF'
