@@ -49,6 +49,23 @@ jobs:
             # echo "📦 Copying docker-compose.yml from repo to EC2 folder"
             # cp ~/runner/work/DevOps-Final-Project/DevOps-Final-Project/docker-compose.yml ~/self-healing-app/
 
+                # Step 2: Copy docker-compose.yml (pulling image from Docker Hub)
+            echo "📦 Updating docker-compose.yml..."
+            cat > docker-compose.yml <<'EOF'
+            version: "3.8"
+
+            services:
+              app:
+                image: hamzajawed/self-healing-node-app:latest  # Replace with your actual Docker Hub image
+                container_name: self_healing_node_app
+                restart: always
+                ports:
+                  - "3000:3000"
+                env_file:
+                  - .env
+            EOF
+
+
             # Step 3: Create or update .env file with secrets
             cat > .env <<'EOF'
             MONGO_URI=${{ secrets.MONGO_URI }}
