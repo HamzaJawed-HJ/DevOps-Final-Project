@@ -56,7 +56,7 @@ jobs:
 
             services:
               app:
-                image: hamzajawed/self-healing-node-app:latest  # Replace with your actual Docker Hub image
+                image: hamzajawed/node-selfheal-app:latest  # Replace with your actual Docker Hub image
                 container_name: self_healing_node_app
                 restart: always
                 ports:
